@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 void criaPopulacao(int tamCromossomo, int **populacao){
     srand((unsigned)time(NULL));
@@ -23,6 +24,17 @@ void criaPopulacao(int tamCromossomo, int **populacao){
                     }
                 }
                 populacao[cromossomo][i] = numAleat;
+            }
+        }
+    }
+}
+
+void calculaDistancia(int numCidades, float **distanciaCidades, int *coordenadasX, int *coordenadasY){
+    for(int i = 0; i < numCidades; i++){
+        for(int j = 0; j < numCidades; j++){
+            if(i != j){
+                float aux = pow((coordenadasX[j]-coordenadasX[i]),2)+ pow((coordenadasY[j]-coordenadasY[i]),2);
+                distanciaCidades[i][j] = distanciaCidades[j][i] = sqrt(aux);
             }
         }
     }
@@ -59,6 +71,23 @@ int main()
     //só para conferir se gravou corretamente
     for(int i = 1; i<= numCidades; i++){
         printf("cidade %d: (%d, %d)\n",i,coordenadasX[i-1],coordenadasY[i-1]);
+    }
+
+    float **distanciaCidades = (float**)malloc(numCidades*sizeof(float*));
+    for(int i = 0; i < numCidades; i++){
+        distanciaCidades[i] = (float*)malloc(numCidades*sizeof(float));
+        for(int j = 0; j < numCidades; j++){
+            distanciaCidades[i][j] = 0;
+        }
+    }
+
+    calculaDistancia(numCidades, distanciaCidades, coordenadasX, coordenadasY);
+    //imprime só para conferir
+    for(int i = 0; i < numCidades; i++){
+        for(int j = 0; j < numCidades; j++){
+            if(i != j)
+                printf("distancia da cidade %d para a cidade %d: [%f]\n",i+1,j+1,distanciaCidades[i][j]);
+        }
     }
 
     //cria população
