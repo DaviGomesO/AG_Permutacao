@@ -8,4 +8,4 @@
 
 ##### (29/11)
 - Calcula a distância entre as cidades e aloca em uma matriz de tamanho nxn;
-- Calcula o fitness em sequência, ainda será adaptado para calcular na sequência em que cada cromossomo/individuo apresenta.
+- Calcula agora o fitness de cada individuo da população.
