@@ -9,7 +9,7 @@ void criaPopulacao(int tamCromossomo, int **populacao){
 
     for(int cromossomo = 0; cromossomo < 300; cromossomo++){
         for(int i = 0; i < tamCromossomo; i++){
-            int numAleat = 1+(rand()%30);
+            int numAleat = 1+(rand()%tamCromossomo);
             if(i == 0){
                 populacao[cromossomo][i] = populacao[cromossomo][tamCromossomo] = numAleat;
             }else{
@@ -17,7 +17,7 @@ void criaPopulacao(int tamCromossomo, int **populacao){
                 int j = 0;
                 while(j < i){
                     if(populacao[cromossomo][j] == numAleat){
-                        numAleat = 1+(rand()%30);
+                        numAleat = 1+(rand()%tamCromossomo);
                         j = 0;
                     }else{
                         j++;
@@ -40,11 +40,26 @@ void calculaDistancia(int numCidades, float **distanciaCidades, int *coordenadas
     }
 }
 
+void fitness(int **populacao, float **distanciaCidades, int numCidades){
+    //aqui ainda está calculando sequencial, irei adaptar para cada cromossomo da população
+    float aptidaoIndividuo = 0;
+    int i = 0;
+    while(i < numCidades-1){
+        aptidaoIndividuo += distanciaCidades[i][i+1];
+        printf("\n%dx%d: %f",i+1,i+2,distanciaCidades[i][i+1]);
+        i++;
+    }
+    int j = 0;
+    aptidaoIndividuo += distanciaCidades[i][j];
+    printf("\n%dx%d: %f",i+1,j+1,distanciaCidades[i][j]);
+
+    printf("\nFitness da sequencia: %f\n", aptidaoIndividuo);
+}
 int main()
 {
     //leitura do arquivo com dados do mapa
     FILE *arquivo;
-    arquivo = fopen("Testes/tspcit30.txt", "rt");
+    arquivo = fopen("Testes/tspcit101.txt", "rt");
     char *result;
     if(arquivo == NULL)
     {
@@ -106,9 +121,10 @@ int main()
         printf("\n");
     }
 
+    fitness(populacao, distanciaCidades, numCidades);
+
     /*
     passos seguintes:
-    - calcular dist�ncia de todas as cidades
     - calcular fitness de cada individuo
     -fazer a sele��o dos individuos com torneio de tamanho 2
     - fazer crossover e muta��o, que tem taxas de 0.8 e 0.1, respectivamente
