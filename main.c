@@ -9,7 +9,7 @@ void criaPopulacao(int tamCromossomo, int **populacao){
 
     for(int cromossomo = 0; cromossomo < 300; cromossomo++){
         for(int i = 0; i < tamCromossomo; i++){
-            int numAleat = 1+(rand()%tamCromossomo);
+            int numAleat = (rand()%tamCromossomo);
             if(i == 0){
                 populacao[cromossomo][i] = populacao[cromossomo][tamCromossomo] = numAleat;
             }else{
@@ -17,7 +17,7 @@ void criaPopulacao(int tamCromossomo, int **populacao){
                 int j = 0;
                 while(j < i){
                     if(populacao[cromossomo][j] == numAleat){
-                        numAleat = 1+(rand()%tamCromossomo);
+                        numAleat = (rand()%tamCromossomo);
                         j = 0;
                     }else{
                         j++;
@@ -40,26 +40,29 @@ void calculaDistancia(int numCidades, float **distanciaCidades, int *coordenadas
     }
 }
 
-void fitness(int **populacao, float **distanciaCidades, int numCidades){
-    //aqui ainda está calculando sequencial, irei adaptar para cada cromossomo da população
-    float aptidaoIndividuo = 0;
-    int i = 0;
-    while(i < numCidades-1){
-        aptidaoIndividuo += distanciaCidades[i][i+1];
-        printf("\n%dx%d: %f",i+1,i+2,distanciaCidades[i][i+1]);
-        i++;
-    }
-    int j = 0;
-    aptidaoIndividuo += distanciaCidades[i][j];
-    printf("\n%dx%d: %f",i+1,j+1,distanciaCidades[i][j]);
+void fitness(int **populacao, float **distanciaCidades, int numCidades, float *fitnessPop){
+    for(int aux = 0; aux < 300; aux++){
+        float aptidaoIndividuo = 0;
+        int i = 0;
+        while(i < numCidades-1){
+            aptidaoIndividuo += distanciaCidades[populacao[aux][i]][populacao[aux][i+1]];
+            printf("\n%dx%d: %f",populacao[aux][i]+1,populacao[aux][i+1]+1,distanciaCidades[populacao[aux][i]][populacao[aux][i+1]]);
+            i++;
+        }
+        int j = 0;
+        aptidaoIndividuo += distanciaCidades[populacao[aux][i]][populacao[aux][j]];
+        printf("\n%dx%d: %f",populacao[aux][i]+1,populacao[aux][i+1]+1,distanciaCidades[populacao[aux][i]][populacao[aux][j]]);
 
-    printf("\nFitness da sequencia: %f\n", aptidaoIndividuo);
+        fitnessPop[aux] = aptidaoIndividuo;
+        printf("\nFitness da sequencia: %f\n", aptidaoIndividuo);
+    }
 }
+
 int main()
 {
     //leitura do arquivo com dados do mapa
     FILE *arquivo;
-    arquivo = fopen("Testes/tspcit101.txt", "rt");
+    arquivo = fopen("Testes/tspcit100.txt", "rt");
     char *result;
     if(arquivo == NULL)
     {
@@ -116,16 +119,22 @@ int main()
     //imprime a população
     for(int i = 0; i<300; i++){
         for(int j = 0; j <= numCidades; j++){
-            printf("[%d]",populacao[i][j]);
+            printf("[%d]",populacao[i][j]+1);
         }
         printf("\n");
     }
 
-    fitness(populacao, distanciaCidades, numCidades);
+    //calcula o fitness de cada cromossomo
+    float *fitnessPop = (float*)malloc(300*sizeof(float));
+    fitness(populacao, distanciaCidades, numCidades, fitnessPop);
+
+    for(int i = 0; i < 300; i++){
+        printf("\nfitness do cromossomo %d: %f",i+1, fitnessPop[i]);
+    }
 
     /*
     passos seguintes:
-    - calcular fitness de cada individuo
+    - aplicar elitismo, no que estou entendendo, é basicamente fazer a ordenação dos elementos, penso em aplicar esse elitismo com insertion sort decrescente
     -fazer a sele��o dos individuos com torneio de tamanho 2
     - fazer crossover e muta��o, que tem taxas de 0.8 e 0.1, respectivamente
     - aplicar crit�rio de parada
