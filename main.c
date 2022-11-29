@@ -3,21 +3,28 @@
 #include <string.h>
 #include <time.h>
 
-void sorteiaCromossomo(int intervaloMax){
-    int *cromossomo = (int*)malloc((intervaloMax+1)*sizeof(int));
+void criaPopulacao(int tamCromossomo, int **populacao){
     srand((unsigned)time(NULL));
 
-    for(int i = 0; i < intervaloMax; i++){
-        int numAleat = 1+(rand()%30);
-        if(i == 0){
-            cromossomo[i] = cromossomo[intervaloMax] = numAleat;
-        }else{
-            cromossomo[i] = numAleat;
+    for(int cromossomo = 0; cromossomo < 300; cromossomo++){
+        for(int i = 0; i < tamCromossomo; i++){
+            int numAleat = 1+(rand()%30);
+            if(i == 0){
+                populacao[cromossomo][i] = populacao[cromossomo][tamCromossomo] = numAleat;
+            }else{
+                //verifico se o número já não existe no cromossomo
+                int j = 0;
+                while(j < i){
+                    if(populacao[cromossomo][j] == numAleat){
+                        numAleat = 1+(rand()%30);
+                        j = 0;
+                    }else{
+                        j++;
+                    }
+                }
+                populacao[cromossomo][i] = numAleat;
+            }
         }
-    }
-
-    for(int i = 0; i < intervaloMax; i++){
-        printf("%d\n",cromossomo[i]);
     }
 }
 
@@ -49,19 +56,26 @@ int main()
         linha++;
     }
 
-    //s� para conferir se gravou corretamente
+    //só para conferir se gravou corretamente
     for(int i = 1; i<= numCidades; i++){
         printf("cidade %d: (%d, %d)\n",i,coordenadasX[i-1],coordenadasY[i-1]);
     }
 
-    //cria popula��o
+    //cria população
     int **populacao = (int**)malloc(300*sizeof(int*));
     for(int i = 0; i < 300; i++){
         populacao[i] = (int*)malloc((numCidades+1)*sizeof(int));
     }
 
-    //criar popula��o aleatoriamente
-    sorteiaCromossomo(numCidades);
+    criaPopulacao(numCidades, populacao);
+
+    //imprime a população
+    for(int i = 0; i<300; i++){
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",populacao[i][j]);
+        }
+        printf("\n");
+    }
 
     /*
     passos seguintes:
