@@ -9,3 +9,8 @@
 ##### (29/11)
 - Calcula a distância entre as cidades e aloca em uma matriz de tamanho nxn;
 - Calcula agora o fitness de cada individuo da população.
+
+#### (06/12)
+- Aplicado a ordenação, para fins elitista;
+- Faz o torneio entre dois cromossomos da população, escolhendo a melhor solução, no caso a de menor distância;
+- Faz o Crossover pegando genes de um pai até um certo corte, e genes de outro pai do corte em diante.
