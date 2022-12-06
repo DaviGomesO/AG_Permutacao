@@ -117,11 +117,22 @@ int torneio(int **populacao, int numCromossomos, int tamanhoTorneio)
     return melhor;
 }
 
+int conferirRestricao(int *filho, int numCidades){
+    for(int i = 1; i <  numCidades; i++){
+        for(int j = 0; j < i; j++){
+            //printf("\n%d = %d", filho[i], filho[j]);
+            if(filho[i] == filho[j]) return 0;
+        }
+    }
+    return 1;
+}
+
 void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCidades)
 {
-    for (int geraFilho = 0; geraFilho < 50; geraFilho++)
+    int aux = numCromossomos;
+    srand((unsigned)time(NULL));
+    for (int geraFilho = 0; aux < 400; geraFilho++)
     {
-        srand((unsigned)time(NULL));
         int tamanhoTorneio = 2;
         int numTorneio_01;
         int numTorneio_02;
@@ -160,54 +171,39 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
         filho_01[numCidades] = filho_01[0];
         filho_02[numCidades] = filho_02[0];
 
+
         // Adicionando valores na matriz de nova geracao
         printf("-------------------------------------------------------------------------------------------------\n");
         printf("Filhos %d: \n" , geraFilho);
-        for (int j = 0; j <= numCidades; j++)
-        {
-            novaGeracao[numCromossomos][j] = filho_01[j];
-            novaGeracao[numCromossomos + 1][j] = filho_02[j];
+
+        //conferir se os filhos atendem as restrições
+        int confereFilho1 = conferirRestricao(filho_01, numCidades);
+        int confereFilho2 = conferirRestricao(filho_02, numCidades);
+
+        //se os dois filhos passarem das restrições, adiciona os dois
+        if(confereFilho1+confereFilho2 == 2){
+            for (int j = 0; j <= numCidades; j++)
+            {
+                novaGeracao[aux][j] = filho_01[j];
+                novaGeracao[aux + 1][j] = filho_02[j];
+            }
+            aux = aux + 2;
+        }else if(confereFilho1+confereFilho2 == 1){
+            // se passar somente 1 filho, adiciona o mesmo
+            if(confereFilho1 == 1){
+                for (int j = 0; j <= numCidades; j++)
+                {
+                    novaGeracao[aux][j] = filho_01[j];
+                }
+                aux++;
+            }else if(confereFilho2 == 1){
+                for (int j = 0; j <= numCidades; j++)
+                {
+                    novaGeracao[aux][j] = filho_02[j];
+                }
+                aux++;
+            }
         }
-        numCromossomos = numCromossomos + 2;
-
-
-        // Imprimendo valores
-
-        // printf("Pai 01:\n");
-        // for(int j = 0; j <= 100; j++) printf("[%d]", populacao[numTorneio_01][j] + 1);
-        // printf("\nnumTorneio_01: %d", numTorneio_01);
-        // printf("\npopulacao[%d][0]: %d", numTorneio_01, populacao[numTorneio_01][0] + 1);
-        // printf("\n-------------------------------------------------------------------------------------\n");
-
-        // printf("Pai 02:\n");
-        // for(int j = 0; j <= 100; j++) printf("[%d]", populacao[numTorneio_02][j] + 1);
-        // printf("\nnumGenesAleatorio02: %d", numTorneio_02);
-        // printf("\npopulacao[%d][100]: %d", numTorneio_02, populacao[numTorneio_02][100] + 1);
-        // printf("\n-------------------------------------------------------------------------------------\n");
-
-        /*
-        printf("Filho 01:\n");
-        for(int i = 0; i <= numCidades; i++) {
-            printf("[%d]", filho_01[i]);
-        }
-        printf("\n-------------------------------------------------------------------------------------\n");
-
-        printf("Filho 02:\n");
-        for(int i = 0; i <= numCidades; i++) {
-            printf("[%d]", filho_02[i]);
-        }
-        printf("\n-------------------------------------------------------------------------------------\n");
-        */
-    }
-
-    printf("Nova geracao:\n");
-    for (int i = 0; i < 400; i++)
-    {
-        for (int j = 0; j <= numCidades; j++)
-        {
-            printf("[%d]", novaGeracao[i][j]);
-        }
-        printf("\n");
     }
 }
 
@@ -302,10 +298,12 @@ int main()
         printf("\nfitness do cromossomo %d: %f",i+1, fitnessPop[i]);
     }
 
+    float *fitnessNG = (float*)malloc(400 * sizeof(float));
     int **novaGeracao = (int **)malloc(400 * sizeof(int *));
     for (int i = 0; i < 400; i++)
     {
         novaGeracao[i] = (int *)malloc((numCidades + 1) * sizeof(int));
+        fitnessNG[i] = 0;
     }
 
     for (int i = 0; i < 300; i++)
@@ -314,10 +312,24 @@ int main()
         {
             novaGeracao[i][j] = populacao[i][j];
         }
+        fitnessNG[i] = fitnessPop[i];
     }
 
 
     crossover(populacao, novaGeracao, tamPop, numCidades);
+
+    //calcular o fitness desses novos filhos
+    //fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400);
+    printf("Nova geracao:\n");
+    for (int i = 0; i < 400; i++)
+    {
+        printf("\ncromossomo %d", i+1);
+        for (int j = 0; j <= numCidades; j++)
+        {
+            printf("[%d]", novaGeracao[i][j]);
+        }
+        printf("\nfitness: %f",fitnessNG[i]);
+    }
 
     /*
     passos seguintes:
