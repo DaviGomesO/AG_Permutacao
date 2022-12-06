@@ -151,8 +151,8 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
         numTorneio_01 = torneio(populacao, numCromossomos, tamanhoTorneio);
         numTorneio_02 = torneio(populacao, numCromossomos, tamanhoTorneio);
         for (int j = 0; j <= numCidades; j++){
-            pai_01[j] = populacao[numTorneio_01][j] + 1;
-            pai_02[j] = populacao[numTorneio_02][j] + 1;
+            pai_01[j] = populacao[numTorneio_01][j];
+            pai_02[j] = populacao[numTorneio_02][j];
         }
 
         // Gerando os filhos a partir dos pais
@@ -171,10 +171,21 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
         filho_01[numCidades] = filho_01[0];
         filho_02[numCidades] = filho_02[0];
 
-
         // Adicionando valores na matriz de nova geracao
         printf("-------------------------------------------------------------------------------------------------\n");
         printf("Filhos %d: \n" , geraFilho);
+
+        printf("filho");
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",filho_01[j]+1);
+        }
+        printf("\n");
+        printf("filho");
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",filho_02[j]+1);
+        }
+        printf("\n");
+
 
         //conferir se os filhos atendem as restrições
         int confereFilho1 = conferirRestricao(filho_01, numCidades);
@@ -182,6 +193,7 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
 
         //se os dois filhos passarem das restrições, adiciona os dois
         if(confereFilho1+confereFilho2 == 2){
+            printf("\nAceita os dois!");
             for (int j = 0; j <= numCidades; j++)
             {
                 novaGeracao[aux][j] = filho_01[j];
@@ -189,7 +201,8 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
             }
             aux = aux + 2;
         }else if(confereFilho1+confereFilho2 == 1){
-            // se passar somente 1 filho, adiciona o mesmo
+            // se passar somente 1 filho, adiciona o mesmo, provavelmente nunca ocorre
+            printf("\nAceita apenas um");
             if(confereFilho1 == 1){
                 for (int j = 0; j <= numCidades; j++)
                 {
@@ -203,6 +216,8 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
                 }
                 aux++;
             }
+        }else{
+            printf("\nNao aceita nenhum dos dois");
         }
     }
 }
@@ -258,7 +273,7 @@ int main()
     }
 
     //cria população
-    int tamPop = 300;
+    int tamPop = 300, tamPopAux = 400;
     int **populacao = (int**)malloc(tamPop*sizeof(int*));
     for(int i = 0; i < tamPop; i++){
         populacao[i] = (int*)malloc((numCidades+1)*sizeof(int));
@@ -319,21 +334,50 @@ int main()
     crossover(populacao, novaGeracao, tamPop, numCidades);
 
     //calcular o fitness desses novos filhos
-    //fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400);
+    fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400);
     printf("Nova geracao:\n");
     for (int i = 0; i < 400; i++)
     {
         printf("\ncromossomo %d", i+1);
         for (int j = 0; j <= numCidades; j++)
         {
-            printf("[%d]", novaGeracao[i][j]);
+            printf("[%d]", novaGeracao[i][j]+1);
         }
         printf("\nfitness: %f",fitnessNG[i]);
     }
 
+    insertion_sort(novaGeracao,fitnessNG,400,numCidades);
+
+    for (int i = 0; i < 400; i++)
+    {
+        printf("\ncromossomo %d", i+1);
+        for (int j = 0; j <= numCidades; j++)
+        {
+            printf("[%d]", novaGeracao[i][j]+1);
+        }
+        printf("\nfitness: %f",fitnessNG[i]);
+    }
+
+    //aplicar elitismo pegando os primeiros 300 elementos da nova geração
+    for(int i = 0; i<300; i++){
+        for(int j = 0; j <= numCidades; j++){
+            populacao[i][j] = novaGeracao[i][j];
+        }
+        fitnessPop[i] = fitnessNG[i];
+    }
+
+    for (int i = 0; i < 300; i++)
+    {
+        printf("\ncromossomo %d", i+1);
+        for (int j = 0; j <= numCidades; j++)
+        {
+            printf("[%d]", populacao[i][j]+1);
+        }
+        printf("\nfitness: %f",fitnessPop[i]);
+    }
+
     /*
     passos seguintes:
-    -fazer a sele��o dos individuos com torneio de tamanho 2
     - fazer crossover e muta��o, que tem taxas de 0.8 e 0.1, respectivamente
     - aplicar crit�rio de parada
     */
