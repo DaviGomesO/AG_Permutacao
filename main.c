@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <time.h>
 
 void criaPopulacao(int tamCromossomo, int **populacao, int tamPop){
     srand((unsigned)time(NULL));
@@ -264,6 +265,8 @@ void mutacao(int **populacao, int **novaGeracao, int numCromossomos, int numCida
         //escolhendo duas posições para fazer a troca, evitando trocar a cidade inicial
         int pos1 = 1 + (rand() % numCidades);
         int pos2 = 1 + (rand() % numCidades);
+        //int pos3 = 1 + (rand() % numCidades);
+        //int pos4 = 1 + (rand() % numCidades);
 
         //fazendo a troca
         for(int i = 0; i <= numCidades; i++){
@@ -271,6 +274,8 @@ void mutacao(int **populacao, int **novaGeracao, int numCromossomos, int numCida
         }
         filho[pos1] = pai[pos2];
         filho[pos2] = pai[pos1];
+        //filho[pos3] = pai[pos4];
+        //filho[pos4] = pai[pos3];
 
         //conferindo se esse novo cromossomo passa nas restrições
         int confereFilho = conferirRestricao(filho, numCidades);
@@ -310,11 +315,12 @@ void elitismo(int tamCromossomo, int numCidades, int **populacao, int **novaGera
 
 int main()
 {
+    clock_t tem = clock(); //armazena tempo de execução
     //leitura do arquivo com dados do mapa
     FILE *arquivo;
     FILE *resultados;
-    arquivo = fopen("Testes/tspcit101.txt", "rt");
-    resultados = fopen("Testes/Resultados/resultado teste para mapa com 101 cidades.txt", "wt");
+    arquivo = fopen("Testes/tspcit30.txt", "rt");
+    resultados = fopen("Testes/Resultados/resultado teste para mapa com 30 cidades.txt", "wt");
     char *result;
     if(arquivo == NULL)
     {
@@ -420,7 +426,7 @@ int main()
     //aplicando gerações dos novos cromossomos
     int periodoSemConvergencia = 0;
     for(int geracoes = 0; geracoes <= 1000; geracoes++){
-        if(periodoSemConvergencia == 100){
+        if(periodoSemConvergencia == 50){
             printf("\nGeracao %d\nPAROU!!!", geracoes);
             fprintf(resultados,"\nParou na %d geração, devido ao critério de parada, que é o de 50 gerações sem convergir o melhor cromossomo.", geracoes);
             break;
@@ -547,7 +553,17 @@ int main()
     /*
     passos seguintes:
     - fazer crossover e muta��o, que tem taxas de 0.8 e 0.1, respectivamente
+    - calcular tempo de execução
+    - fazer testes - 10 para cada instância obs: quantidade de gerações
     */
 
+    tem = clock() - tem; //tempo final - tempo inicial
+    int minutos = (((double)tem)/(CLOCKS_PER_SEC/1000))/60000;
+    int segundos = (((((double)tem)/(CLOCKS_PER_SEC/1000))/60000)-minutos)*60;
+
+    fprintf(resultados,"\nTempo de execucao: ~ %d minutos e %d segundos", minutos, segundos);
+
+    fclose(resultados);
+    fclose(arquivo);
     return 0;
 }
