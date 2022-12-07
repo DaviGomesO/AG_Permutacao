@@ -17,3 +17,7 @@
 - Aplica o processo de gerações a partir das transformações de crossover;
 - Aplica o elitismo;
 - Verifica se o cromossomo gerado no crossover atende a restrição.
+
+#### (07/12)
+- Criado a mutação que escolhe duas posições do pai, e faz a troca entre essas duas posições no filho;
+- Guarda informações do melhor cromossomo em um arquivo txt.
