@@ -13,4 +13,7 @@
 #### (06/12)
 - Aplicado a ordenação, para fins elitista;
 - Faz o torneio entre dois cromossomos da população, escolhendo a melhor solução, no caso a de menor distância;
-- Faz o Crossover pegando genes de um pai até um certo corte, e genes de outro pai do corte em diante.
+- Faz o Crossover pegando genes de um pai até um certo corte, e genes de outro pai do corte em diante;
+- Aplica o processo de gerações a partir das transformações de crossover;
+- Aplica o elitismo;
+- Verifica se o cromossomo gerado no crossover atende a restrição.
