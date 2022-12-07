@@ -312,12 +312,21 @@ int main()
 {
     //leitura do arquivo com dados do mapa
     FILE *arquivo;
-    arquivo = fopen("Testes/tspcit100.txt", "rt");
+    FILE *resultados;
+    arquivo = fopen("Testes/tspcit101.txt", "rt");
+    resultados = fopen("Testes/Resultados/resultado teste para mapa com 101 cidades.txt", "wt");
     char *result;
     if(arquivo == NULL)
     {
         printf("Problemas na abertura do arquivo\n");
         return;
+    }
+
+    if(resultados != NULL)
+        printf("Arquivo de resultados criado com sucesso!!\n");
+    else{
+        printf("Problemas na criacao do arquivo\n");
+        return 1;
     }
 
     int linha = 0, numCidades = 0;
@@ -400,16 +409,20 @@ int main()
     }*/
 
     printf("\nMelhor cromossomo inicial:\n");
+    fprintf(resultados,"Melhor cromossomo inicial:\n");
     for(int i = 0; i <= numCidades; i++){
         printf("[%d]",populacao[0][i]+1);
+        fprintf(resultados,"[%d]",populacao[0][i]+1);
     }
     printf("\nFitness: %f", fitnessPop[0]);
+    fprintf(resultados,"\nFitness: %f", fitnessPop[0]);
 
     //aplicando gerações dos novos cromossomos
     int periodoSemConvergencia = 0;
-    for(int geracoes = 0; geracoes <= 300; geracoes++){
-        if(periodoSemConvergencia == 50){
+    for(int geracoes = 0; geracoes <= 1000; geracoes++){
+        if(periodoSemConvergencia == 100){
             printf("\nGeracao %d\nPAROU!!!", geracoes);
+            fprintf(resultados,"\nParou na %d geração, devido ao critério de parada, que é o de 50 gerações sem convergir o melhor cromossomo.", geracoes);
             break;
         }
         float melhorSolucao = fitnessPop[0];
@@ -523,15 +536,17 @@ int main()
 
 
     printf("\nMelhor cromossomo final:\n");
+    fprintf(resultados,"\nMelhor cromossomo final:\n");
     for(int i = 0; i <= numCidades; i++){
         printf("[%d]",populacao[0][i]+1);
+        fprintf(resultados,"[%d]",populacao[0][i]+1);
     }
     printf("\nFitness: %f", fitnessPop[0]);
+    fprintf(resultados,"\nFitness: %f", fitnessPop[0]);
 
     /*
     passos seguintes:
     - fazer crossover e muta��o, que tem taxas de 0.8 e 0.1, respectivamente
-    - aplicar informações em um arquivo txt
     */
 
     return 0;
