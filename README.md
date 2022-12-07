@@ -21,4 +21,5 @@
 #### (07/12)
 - Criado a mutação que escolhe duas posições do pai, e faz a troca entre essas duas posições no filho;
 - Guarda informações do melhor cromossomo em um arquivo txt;
-- Armazena informações sobre o tempo de execução.
+- Armazena informações sobre o tempo de execução;
+- Aplicado as taxas de crossover e mutação.
