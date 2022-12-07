@@ -40,8 +40,8 @@ void calculaDistancia(int numCidades, float **distanciaCidades, int *coordenadas
     }
 }
 
-void fitness(int **populacao, float **distanciaCidades, int numCidades, float *fitnessPop, int tamPop){
-    for(int aux = 0; aux < tamPop; aux++){
+void fitness(int **populacao, float **distanciaCidades, int numCidades, float *fitnessPop, int tamPop, int posInicial){
+    for(int aux = posInicial; aux < tamPop; aux++){
         float aptidaoIndividuo = 0;
         int i = 0;
         while(i < numCidades-1){
@@ -189,7 +189,7 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
         filho_01[numCidades] = filho_01[0];
         filho_02[numCidades] = filho_02[0];
 
-        // Adicionando valores na matriz de nova geracao
+        /*
         printf("-------------------------------------------------------------------------------------------------\n");
         printf("Filhos %d: \n" , geraFilho);
 
@@ -203,7 +203,7 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
             printf("[%d]",filho_02[j]+1);
         }
         printf("\n");
-
+        */
 
         //conferir se os filhos atendem as restrições
         int confereFilho1 = conferirRestricao(filho_01, numCidades);
@@ -215,7 +215,7 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
 
         //se os dois filhos passarem das restrições, adiciona os dois
         if(confereFilho1+confereFilho2 == 2){
-            printf("\nAceita os dois!");
+            //printf("\nAceita os dois!");
             for (int j = 0; j <= numCidades; j++)
             {
                 novaGeracao[aux][j] = filho_01[j];
@@ -224,7 +224,7 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
             aux = aux + 2;
         }else if(confereFilho1+confereFilho2 == 1){
             // se passar somente 1 filho, adiciona o mesmo, provavelmente nunca ocorre
-            printf("\nAceita apenas um");
+            //printf("\nAceita apenas um");
             if(confereFilho1 == 1){
                 for (int j = 0; j <= numCidades; j++)
                 {
@@ -239,11 +239,65 @@ void crossover(int **populacao, int **novaGeracao, int numCromossomos, int numCi
                 aux++;
             }
         }else{
-            printf("\nNao aceita nenhum dos dois");
+            //printf("\nNao aceita nenhum dos dois");
         }
     }
 }
 
+void mutacao(int **populacao, int **novaGeracao, int numCromossomos, int numCidades){
+    int aux = numCromossomos;
+    srand((unsigned)time(NULL));
+
+    for (int geraFilho = 0; aux < 400; geraFilho++)
+    {
+        int *pai = (int *)malloc((numCidades+1) * sizeof(int));
+        int *filho = (int *)malloc((numCidades+1) * sizeof(int));
+
+        //escolhendo o pai
+        int tamanhoTorneio = 2;
+        int numTorneio;
+        numTorneio = torneio(populacao, numCromossomos, tamanhoTorneio);
+        for (int j = 0; j <= numCidades; j++){
+            pai[j] = populacao[numTorneio][j];
+        }
+
+        //escolhendo duas posições para fazer a troca, evitando trocar a cidade inicial
+        int pos1 = 1 + (rand() % numCidades);
+        int pos2 = 1 + (rand() % numCidades);
+
+        //fazendo a troca
+        for(int i = 0; i <= numCidades; i++){
+            filho[i] = pai[i];
+        }
+        filho[pos1] = pai[pos2];
+        filho[pos2] = pai[pos1];
+
+        //conferindo se esse novo cromossomo passa nas restrições
+        int confereFilho = conferirRestricao(filho, numCidades);
+        //confereFilho1 += conferirCromossomo(filho_01,populacao,numCromossomos,numCidades);
+
+        if(confereFilho == 1){
+            //printf("\nAceita o filho!");
+            for (int j = 0; j <= numCidades; j++)
+            {
+                novaGeracao[aux][j] = filho[j];
+            }
+            aux++;
+        }else{
+            //printf("\nNao aceita o filho");
+        }
+
+        /*printf("\npai -");
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",pai[j]+1);
+        }
+        printf("\nposicoes alteradas %d e %d", pos1+1, pos2+2);
+        printf("\nfilho -");
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",filho[j]+1);
+        }*/
+    }
+}
 
 void elitismo(int tamCromossomo, int numCidades, int **populacao, int **novaGeracao, int *fitnessPop, int *fitnessNG){
     for(int i = 0; i<tamCromossomo; i++){
@@ -258,7 +312,7 @@ int main()
 {
     //leitura do arquivo com dados do mapa
     FILE *arquivo;
-    arquivo = fopen("Testes/tspcit30.txt", "rt");
+    arquivo = fopen("Testes/tspcit100.txt", "rt");
     char *result;
     if(arquivo == NULL)
     {
@@ -314,26 +368,26 @@ int main()
     criaPopulacao(numCidades, populacao, tamPop);
 
     //imprime a população
-    for(int i = 0; i<tamPop; i++){
+    /*for(int i = 0; i<tamPop; i++){
         printf("cromossomo %d", i+1);
         for(int j = 0; j <= numCidades; j++){
             printf("[%d]",populacao[i][j]+1);
         }
         printf("\n");
-    }
+    }*/
 
     //calcula o fitness de cada cromossomo
     float *fitnessPop = (float*)malloc(tamPop*sizeof(float));
-    fitness(populacao, distanciaCidades, numCidades, fitnessPop, tamPop);
+    fitness(populacao, distanciaCidades, numCidades, fitnessPop, tamPop, 0);
 
-    for(int i = 0; i < tamPop; i++){
+    /*for(int i = 0; i < tamPop; i++){
         printf("\nfitness do cromossomo %d: %f",i+1, fitnessPop[i]);
-    }
+    }*/
 
     //ordena para prevalecer o elitismo
     insertion_sort(populacao, fitnessPop, tamPop, numCidades);
 
-    for(int i = 0; i<tamPop; i++){
+    /*for(int i = 0; i<tamPop; i++){
         printf("cromossomo %d", i+1);
         for(int j = 0; j <= numCidades; j++){
             printf("[%d]",populacao[i][j]+1);
@@ -343,12 +397,17 @@ int main()
 
     for(int i = 0; i < tamPop; i++){
         printf("\nfitness do cromossomo %d: %f",i+1, fitnessPop[i]);
+    }*/
+
+    printf("\nMelhor cromossomo inicial:\n");
+    for(int i = 0; i <= numCidades; i++){
+        printf("[%d]",populacao[0][i]+1);
     }
+    printf("\nFitness: %f", fitnessPop[0]);
 
     //aplicando gerações dos novos cromossomos
-
     int periodoSemConvergencia = 0;
-    for(int geracoes = 0; geracoes <= 10; geracoes++){
+    for(int geracoes = 0; geracoes <= 300; geracoes++){
         if(periodoSemConvergencia == 50){
             printf("\nGeracao %d\nPAROU!!!", geracoes);
             break;
@@ -375,8 +434,8 @@ int main()
         crossover(populacao, novaGeracao, tamPop, numCidades);
 
         //calcular o fitness desses novos filhos
-        fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400);
-        printf("Nova geracao:\n");
+        fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400, tamPop);
+        /*printf("Nova geracao:\n");
         for (int i = 0; i < 400; i++)
         {
             printf("\ncromossomo %d", i+1);
@@ -385,11 +444,11 @@ int main()
                 printf("[%d]", novaGeracao[i][j]+1);
             }
             printf("\nfitness: %f",fitnessNG[i]);
-        }
+        }*/
 
         insertion_sort(novaGeracao,fitnessNG,400,numCidades);
 
-        for (int i = 0; i < 400; i++)
+        /*for (int i = 0; i < 400; i++)
         {
             printf("\ncromossomo %d", i+1);
             for (int j = 0; j <= numCidades; j++)
@@ -397,12 +456,12 @@ int main()
                 printf("[%d]", novaGeracao[i][j]+1);
             }
             printf("\nfitness: %f",fitnessNG[i]);
-        }
+        }*/
 
         //aplicar elitismo pegando os primeiros 300 elementos da nova geração
         elitismo(tamPop,numCidades,populacao,novaGeracao,fitnessPop,fitnessNG);
 
-        for (int i = 0; i < 300; i++)
+        /*for (int i = 0; i < 300; i++)
         {
             printf("\ncromossomo %d", i+1);
             for (int j = 0; j <= numCidades; j++)
@@ -410,9 +469,48 @@ int main()
                 printf("[%d]", populacao[i][j]+1);
             }
             printf("\nfitness: %f",fitnessPop[i]);
-        }
+        }*/
 
         //mutação
+        mutacao(populacao, novaGeracao, tamPop, numCidades);
+
+        //calcular o fitness desses novos filhos
+        fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400, tamPop);
+        /*printf("Nova geracao:\n");
+        for (int i = 0; i < 400; i++)
+        {
+            printf("\ncromossomo %d", i+1);
+            for (int j = 0; j <= numCidades; j++)
+            {
+                printf("[%d]", novaGeracao[i][j]+1);
+            }
+            printf("\nfitness: %f",fitnessNG[i]);
+        }*/
+
+        insertion_sort(novaGeracao,fitnessNG,400,numCidades);
+
+        /*for (int i = 0; i < 400; i++)
+        {
+            printf("\ncromossomo %d", i+1);
+            for (int j = 0; j <= numCidades; j++)
+            {
+                printf("[%d]", novaGeracao[i][j]+1);
+            }
+            printf("\nfitness: %f",fitnessNG[i]);
+        }*/
+
+        //aplicar elitismo pegando os primeiros 300 elementos da nova geração
+        elitismo(tamPop,numCidades,populacao,novaGeracao,fitnessPop,fitnessNG);
+
+        /*for (int i = 0; i < 300; i++)
+        {
+            printf("\ncromossomo %d", i+1);
+            for (int j = 0; j <= numCidades; j++)
+            {
+                printf("[%d]", populacao[i][j]+1);
+            }
+            printf("\nfitness: %f",fitnessPop[i]);
+        }*/
 
         //critério de parada
         //verifica se o melhor cromossomo da população se alterou
@@ -423,10 +521,17 @@ int main()
         }
     }
 
+
+    printf("\nMelhor cromossomo final:\n");
+    for(int i = 0; i <= numCidades; i++){
+        printf("[%d]",populacao[0][i]+1);
+    }
+    printf("\nFitness: %f", fitnessPop[0]);
+
     /*
     passos seguintes:
     - fazer crossover e muta��o, que tem taxas de 0.8 e 0.1, respectivamente
-    - retornar a melhor solução
+    - aplicar informações em um arquivo txt
     */
 
     return 0;
