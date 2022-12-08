@@ -296,11 +296,127 @@ void mutacao(int **populacao, int **novaGeracao, int numCromossomos, int numCida
         for(int j = 0; j <= numCidades; j++){
             printf("[%d]",pai[j]+1);
         }
-        printf("\nposicoes alteradas %d e %d", pos1+1, pos2+2);
+        printf("\nposicoes alteradas %d e %d", pos1+1, pos2+1);
         printf("\nfilho -");
         for(int j = 0; j <= numCidades; j++){
             printf("[%d]",filho[j]+1);
         }*/
+    }
+}
+
+void mutacaoGuloso(float **distanciaCidades, int **populacao, int **novaGeracao, int numCromossomos, int numCidades){
+    int cont = numCromossomos;
+    srand((unsigned)time(NULL));
+
+    for (int geraFilho = 0; cont < 400; geraFilho++)
+    {
+
+        int *pai = (int *)malloc((numCidades+1) * sizeof(int));
+        int *filho = (int *)malloc((numCidades+1) * sizeof(int));
+
+        //escolhendo o pai
+        int tamanhoTorneio = 2;
+        int numTorneio;
+        numTorneio = torneio(populacao, numCromossomos, tamanhoTorneio);
+        for (int j = 0; j <= numCidades; j++){
+            pai[j] = filho[j] = populacao[numTorneio][j];
+        }
+
+        //escolher uma posição aleatoria do pai para buscar qual a cidade mais próxima dessa sorteada
+        int cidadeEscolhida = 1 + (rand() % numCidades);
+        int cidadeMaisProxima;
+        float menorDistancia = 0;
+        for(int i = 0; i < numCidades; i++){
+            //quando for verificar na matriz, evita verificar na posição em que a distância é igual a zero
+            if(i != cidadeEscolhida){
+                //se a distância ainda tiver zerada pega o valor de distância para a primeira cidade da sequência
+                if(menorDistancia == 0){
+                    menorDistancia = distanciaCidades[cidadeEscolhida][i];
+                    cidadeMaisProxima = i;
+                }else{
+                    if(distanciaCidades[cidadeEscolhida][i] < menorDistancia){
+                        printf("\n%f < %f",distanciaCidades[cidadeEscolhida][i],menorDistancia);
+                        menorDistancia = distanciaCidades[cidadeEscolhida][i];
+                        cidadeMaisProxima = i;
+                    }
+                }
+            }
+        }
+
+        printf("\nMenor distancia encontrada: cidade %d para a cidade %d (%f)", cidadeEscolhida+1, cidadeMaisProxima+1, menorDistancia);
+
+        //procuro em que posição da sequencia a cidade escolhida esta
+        int pos;
+        for(int i = 0; i < numCidades; i++){
+            if(pai[i] == cidadeEscolhida){
+                pos = i;
+                printf("\nA cidade escolhida encontra-se no gene %d", pos+1);
+            }
+        }
+
+        int posEncontrada;
+        //verifico se essa cidade mais próxima já é vizinha no cromossomo escolhido
+        //ou seja, se a cidade mais próxima está entre os genes vizinhos anterior e posterior
+        if(cidadeMaisProxima == pai[pos-1]){
+            printf("\nAs cidades ja fazem vizinhanca no cromossomo %d, ficando no gene anterior.",numTorneio);
+            posEncontrada = pos-1;
+        }else if(cidadeMaisProxima == pai[pos+1]){
+            printf("\nAs cidades ja fazem vizinhanca no cromossomo %d, ficando no gene posterior.",numTorneio);
+            posEncontrada = pos+1;
+        }else{
+            printf("\nAs cidades nao sao vizinhas no cromossomo %d.",numTorneio);
+
+            //vou procurar em qual gene essa cidade mais próxima vai está
+            for(int i = 0; i < numCidades; i++){
+                if(pai[i] == cidadeMaisProxima){
+                    posEncontrada = i;
+                    printf("\nA cidade mais proxima esta no gene %d", posEncontrada+1);
+                }
+            }
+
+            //verifico se a vizinhança dessa cidade tem distancias menores, para constar se vale a pena fazer a troca
+            if(distanciaCidades[cidadeMaisProxima][posEncontrada-1] > menorDistancia){
+                printf("\n%f < %f",distanciaCidades[cidadeMaisProxima][posEncontrada-1],menorDistancia);
+                int aux = filho[posEncontrada-1];
+                filho[posEncontrada-1] = pai[pos];
+                filho[pos] = aux;
+                printf("\nposicoes alteradas %d e %d", pos+1, posEncontrada-1+1);
+            }else if(distanciaCidades[cidadeMaisProxima][posEncontrada+1] > menorDistancia){
+                printf("\n%f < %f",distanciaCidades[cidadeMaisProxima][posEncontrada+1],menorDistancia);
+                int aux = filho[posEncontrada+1];
+                filho[posEncontrada+1] = pai[pos];
+                filho[pos] = aux;
+                printf("\nposicoes alteradas %d e %d", pos+1, posEncontrada+1+1);
+            }
+        }
+
+        //caso cidade inicial seja alterada, vou fazer ela ser a final
+        filho[numCidades] = filho[0];
+
+        printf("\npai - ");
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",pai[j]+1);
+        }
+
+        printf("\nfilho - ");
+        for(int j = 0; j <= numCidades; j++){
+            printf("[%d]",filho[j]+1);
+        }
+
+        //conferindo se esse novo cromossomo passa nas restrições
+        int confereFilho = conferirRestricao(filho, numCidades);
+        //confereFilho += conferirCromossomo(filho_01,populacao,numCromossomos,numCidades);
+
+        if(confereFilho == 1){
+            //printf("\nAceita o filho!");
+            for (int j = 0; j <= numCidades; j++)
+            {
+                novaGeracao[cont][j] = filho[j];
+            }
+            cont++;
+        }else{
+            //printf("\nNao aceita o filho");
+        }
     }
 }
 
@@ -320,7 +436,8 @@ int main()
     FILE *arquivo;
     FILE *resultados;
     arquivo = fopen("Testes/tspcit30.txt", "rt");
-    resultados = fopen("Testes/Resultados/resultado teste para mapa com 30 cidades.txt", "wt");
+    resultados = fopen("Testes/Resultados/30 cidades/resultado teste para mapa com 30 cidades(11).txt", "wt");
+    int qtdGeracoes = 1000;
     char *result;
     if(arquivo == NULL)
     {
@@ -350,6 +467,7 @@ int main()
         }
         linha++;
     }
+    fprintf(resultados, "O teste para a instância de %d utilizou %d gerações.\n",numCidades,qtdGeracoes);
 
     //só para conferir se gravou corretamente
     for(int i = 1; i<= numCidades; i++){
@@ -424,10 +542,12 @@ int main()
     fprintf(resultados,"\nFitness: %f", fitnessPop[0]);
 
     //aplicando gerações dos novos cromossomos
-    srand((unsigned)time(NULL));
+
     float txCrossover = 0.8, txMutacao = 0.1;
     int periodoSemConvergencia = 0;
-    for(int geracoes = 0; geracoes <= 1000; geracoes++){
+    for(int geracoes = 0; geracoes <= qtdGeracoes; geracoes++){
+        //printf("\nGeracao %d", geracoes+1);
+        srand(rand());
         if(periodoSemConvergencia == 50){
             printf("\nGeracao %d\nPAROU!!!", geracoes);
             fprintf(resultados,"\nParou na %d geração, devido ao critério de parada, que é o de 50 gerações sem convergir o melhor cromossomo.", geracoes);
@@ -502,9 +622,12 @@ int main()
         if(aplicaMutacao <= txMutacao){
             //mutação
             mutacao(populacao, novaGeracao, tamPop, numCidades);
+            //esse segundo, não está 100% pronto
+            //mutacaoGuloso(distanciaCidades,populacao,novaGeracao,tamPop,numCidades);
 
             //calcular o fitness desses novos filhos
             fitness(novaGeracao, distanciaCidades, numCidades, fitnessNG, 400, tamPop);
+
             /*printf("Nova geracao:\n");
             for (int i = 0; i < 400; i++)
             {
@@ -542,6 +665,8 @@ int main()
             }*/
         }
 
+        //printf("\nAplica mutacao: %.2f - Aplica crossover: %.2f",aplicaMutacao, aplicaCrossover);
+
         //critério de parada
         //verifica se o melhor cromossomo da população se alterou
         if(melhorSolucao == fitnessPop[0]){
@@ -571,6 +696,8 @@ int main()
     int segundos = (((((double)tem)/(CLOCKS_PER_SEC/1000))/60000)-minutos)*60;
 
     fprintf(resultados,"\nTempo de execucao: ~ %d minutos e %d segundos", minutos, segundos);
+
+
 
     fclose(resultados);
     fclose(arquivo);

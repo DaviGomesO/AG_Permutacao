@@ -1,0 +1,9 @@
+O teste para a instância de 30 utilizou 1000 gerações.
+Melhor cromossomo inicial:
+[6][16][11][2][15][20][21][26][27][23][4][3][29][22][10][9][8][1][5][30][18][28][19][14][24][25][7][12][13][17][6]
+Fitness: 124035.734375
+Parou na 50 geração, devido ao critério de parada, que é o de 50 gerações sem convergir o melhor cromossomo.
+Melhor cromossomo final:
+[6][16][11][2][15][20][21][26][27][23][4][3][29][22][10][9][8][1][5][30][18][28][19][14][24][25][7][12][13][17][6]
+Fitness: 124035.734375
+Tempo de execucao: ~ 0 minutos e 1 segundos
