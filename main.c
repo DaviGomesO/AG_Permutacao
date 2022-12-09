@@ -697,7 +697,70 @@ int main()
 
     fprintf(resultados,"\nTempo de execucao: ~ %d minutos e %d segundos", minutos, segundos);
 
+    /*
+    for(int teste = 0; teste < numCidades; teste++){
+        int *visitou = (int*)malloc((numCidades)*sizeof(int));
+        for(int i = 0; i < numCidades; i++){
+            visitou[i] = 0;
+        }
+        int *vetorMelhor = (int*)malloc((numCidades+1)*sizeof(int));
+        vetorMelhor[0] = teste;
+        visitou[vetorMelhor[0]] = 1;
+        float menorDistancia = 0;
+        int cidadeMaisProxima;
+        float valorotimo = 0;
+        for(int i = 0; i < numCidades; i++){
+            //quando for verificar na matriz, evita verificar na posição em que a distância é igual a zero
+            if(i != vetorMelhor[0]){
+                //se a distância ainda tiver zerada pega o valor de distância para a primeira cidade da sequência
+                if(menorDistancia == 0){
+                    menorDistancia = distanciaCidades[vetorMelhor[0]][i];
+                    cidadeMaisProxima = i;
+                }else{
+                    if(distanciaCidades[vetorMelhor[0]][i] < menorDistancia){
+                        //printf("\n%f < %f",distanciaCidades[vetorMelhor[0]][i],menorDistancia);
+                        menorDistancia = distanciaCidades[vetorMelhor[0]][i];
+                        cidadeMaisProxima = i;
+                    }
+                }
+            }
+        }
+        vetorMelhor[1] = cidadeMaisProxima;
+        visitou[cidadeMaisProxima] = 1;
+        valorotimo += distanciaCidades[vetorMelhor[0]][cidadeMaisProxima];
 
+        for(int cont = 1; cont < numCidades-1; cont++){
+            menorDistancia = 0;
+            for(int i = 0; i < numCidades; i++){
+                if(i != vetorMelhor[cont] && visitou[i] == 0){
+                    //se a distância ainda tiver zerada pega o valor de distância para a primeira cidade da sequência
+                    if(menorDistancia == 0){
+                        menorDistancia = distanciaCidades[vetorMelhor[cont]][i];
+                        cidadeMaisProxima = i;
+                    }else{
+                        if(distanciaCidades[cidadeMaisProxima][i] < menorDistancia){
+                            //printf("\n%f < %f",distanciaCidades[vetorMelhor[cont]][i],menorDistancia);
+                            menorDistancia = distanciaCidades[vetorMelhor[cont]][i];
+                            cidadeMaisProxima = i;
+                        }
+                    }
+                }
+            }
+            vetorMelhor[cont+1] = cidadeMaisProxima;
+            visitou[cidadeMaisProxima] = 1;
+            valorotimo += distanciaCidades[vetorMelhor[cont]][cidadeMaisProxima];
+            printf("\n%d",cidadeMaisProxima+1);
+        }
+
+        valorotimo += distanciaCidades[vetorMelhor[numCidades]][vetorMelhor[0]];
+        vetorMelhor[numCidades] = vetorMelhor[0];
+
+        printf("\nMelhor cromossomo com menores distancias a partir da cidade %d:\n",teste+1);
+        for(int i = 0; i <= numCidades; i++){
+            printf("[%d]",vetorMelhor[i]+1);
+        }
+        printf("\nFitness: %f", valorotimo);
+    }*/
 
     fclose(resultados);
     fclose(arquivo);
