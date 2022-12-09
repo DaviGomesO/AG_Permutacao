@@ -11,7 +11,7 @@
 </div>
 
 <div id="criaPopulacao">
-  <h6>Criação da população</h6>
+  <h5>Criação da população</h5>
   <p>A criação da população se caracteriza no formato aleatório, onde cada criomossomo é criado da seguinte forma:</p>
   <ul>
     <li>Escolhe a cidade inicial de forma aleatória, e aloca a mesma na posição inicial e na posição final do índividuo;</li>
@@ -22,12 +22,12 @@
 </div>
 
 <div id="fitness">
-  <h6>Fitness</h6>
+  <h5>Fitness</h5>
   <p>A função de fitness consiste em percorrer cada individuo da população passada por parâmetro, e vai adicionando ao valor de fitness do índividuo a medida em que percorre o índividuo, consultando na matriz de distâncias qual o valor de distância a partir da sequência apresentada pelo índividuo, e adicionando o valor a variável de aptidão. Ainda, esse valor de aptidão é armazenado em um vetor excludivo para os fitness de cada índividuo, sendo alocados na posição correspondente em que os mesmos aparecem na população.</p>
 </div>
 
 <div id="geracoes">
-  <h6>Gerações</h6>
+  <h5>Gerações</h5>
   <p>Nas gerações são criadas uma população auxiliar com tamanho para alocar 400 individuos, e um vetor auxiliar para os valores de fitness, onde esses irão auxiliar no processo de elitismo para a escolha dos 300 melhores índividuos.</p>
   <p>A população auxiliar recebe os 300 individuos da população principal, assim como o vetor de fitness auxiliar recebe os 300 valores correspondentes.</p>
   <p>Basicamente, após passar pelo processo de Crossover e de Mutação, cria-se novos índividuos e para não perdê-los, alocamos esse individuos na população auxiliar e ordena-se de acordo com os valores de fitness do vetor de fitness auxiliar com os valores da população principal e dos novos índividuos alocados.</p>
@@ -35,11 +35,11 @@
 </div>
 
 <div id="crossover">
-  <h6>Crossover</h6>
+  <h5>Crossover</h5>
 </div>
 
 <div id="mutacao">
-  <h6>Mutação</h6>
+  <h5>Mutação</h5>
 </div>
 
 <hr/>
