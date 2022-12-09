@@ -11,6 +11,7 @@
 <p id="criaPopulacao"></p>
 
 <hr/>
+
 ### Atualizações:
 ##### (28/11)
 - Ler dados do arquivo em txt (Quantidade de cidades e coordenadas de cada cidades);
