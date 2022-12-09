@@ -2,9 +2,7 @@
 
 <h3>Resumo da aplicação</h3>
 
-~~~main
-resumo da main
-~~~
+<p id="main">resumo da main</p>
 
 ### Atualizações:
 ##### (28/11)
