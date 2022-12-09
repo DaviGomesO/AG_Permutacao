@@ -37,12 +37,16 @@
 
 <div id="crossover">
   <h5>Crossover</h5>
-  <p></p>
+  <p>A função de Crossover inicia fazendo a seleção de dois pais por meio do método de seleção conhecido como torneio. Após a seleção, gerará os filhos de tal forma que escolhe-se aleatoriamente um ponto de corte nos pais, onde o filho1 vai receber genes da metade até o ponto de corte do pai1 e do corte até o tamanho do cromossomo vai receber do pai2, analogamente para o filho2, onde o mesmo recebe primeiro os genes do pai2 e depois os genes do pai1.</p>
+  <p>Após gerado os filhos, os mesmos irão passar na verificação de restrição, e caso sejam aceitos, serão adicionados na população auxiliar que passará pelo elitismo mais adiante.</p>
+  <p>O processo se repete até que sejam preenchidas as posições vazias da população auxiliar.</p>
 </div>
 
 <div id="mutacao">
   <h5>Mutação</h5>
-  <p></p>
+  <p>Na mutação, inicia-se escolhendo um cromossomo por meio do método de seleção de torneio. E em seguida, escolhe-se duas posições aleatórias do índividuo selecionado para fazer a troca das informações entre as posições.</p>
+  <p>Após gerado o novo índividuo, o mesmo irá passar na verificação de restrição, e caso seja aceito, será adicionado na população auxiliar que passará pelo elitismo mais adiante.</p>
+  <p>O processo se repete até que sejam preenchidas as posições vazias da população auxiliar.</p>
 </div>
 
 <hr/>
