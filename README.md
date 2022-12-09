@@ -2,13 +2,11 @@
 
 <h3>Resumo da aplicação</h3>
 
-<p id="main">
-  A aplicação inicia importando a instância, em seguida faz a leitura dos dados que estão dispostos no arquivo, onde na primeira linha ele encontra o número correspondente a quantidade de cidades da instância, e após a primeira linha, os dados são dispostos na primeira coluna para a coordanada geográfica X e na segunda coluna para a coordenada geográfica Y. Após a leitura dos dados, é feito o calculo da distância entre as cidades.
-  <br/>
-  O calculo consiste em verificar para cada cidade a distância dela para as demais cidadesl, e guarda esses valores em uma matriz criada exclusivamente para armazenar as distâncias.
-  <br/>
-  Na sequência faz-se a <a href="#criaPopulacao">**criação da população**</a>
-</p>
+<div id="main">
+  <p>A aplicação inicia importando a instância, em seguida faz a leitura dos dados que estão dispostos no arquivo, onde na primeira linha ele encontra o número correspondente a quantidade de cidades da instância, e após a primeira linha, os dados são dispostos na primeira coluna para a coordanada geográfica X e na segunda coluna para a coordenada geográfica Y. Após a leitura dos dados, é feito o calculo da distância entre as cidades.</p>
+  <p>O calculo consiste em verificar para cada cidade a distância dela para as demais cidadesl, e guarda esses valores em uma matriz criada exclusivamente para armazenar as distâncias.</p>
+  <p>Na sequência faz-se a <a href="#criaPopulacao">**criação da população**</a></p>
+</div>
 
 <p id="criaPopulacao"></p>
 
