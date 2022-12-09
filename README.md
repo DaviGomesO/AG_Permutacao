@@ -3,12 +3,20 @@
 <h3>Resumo da aplicação</h3>
 
 <div id="main">
-  <p>A aplicação inicia importando a instância, em seguida faz a leitura dos dados que estão dispostos no arquivo, onde na primeira linha se encontra o número correspondente a quantidade de cidades da instância, e após a primeira linha, os dados são dispostos na primeira coluna para a coordanada geográfica X e na segunda coluna para a coordenada geográfica Y. Após a leitura dos dados, é feito o calculo da distância entre as cidades.</p>
+  <p>A aplicação inicia importando a instância, em seguida faz a leitura dos dados que estão dispostos no arquivo, onde na primeira linha se encontra o número correspondente a quantidade de cidades da instância, e após a primeira linha, os dados são dispostos na primeira coluna para a coordanada geográfica X e na segunda coluna para a coordenada geográfica Y. Após a leitura dos dados, é feito o cálculo da distância entre as cidades.</p>
   <p>O calculo consiste em verificar para cada cidade a distância dela para as demais cidadesl, e guarda esses valores em uma matriz criada exclusivamente para armazenar as distâncias.</p>
-  <p>Na sequência faz-se a <a href="#criaPopulacao">**criação da população**</a></p>
+  <p>Na sequência faz-se a <a href="#criaPopulacao">**criação da população**</a>, e em seguida faz-se o <a href"#">cálculo da aptidão(fitness)</a> de cada índividuo/cromossomo gerado na população inicial.</p>
 </div>
 
-<p id="criaPopulacao"></p>
+<div id="criaPopulacao">
+  <p>A criação da população se caracteriza no formato aleatório, onde cada criomossomo é criado da seguinte forma:</p>
+  <ul>
+    <li>Escolhe a cidade inicial de forma aleatória, e aloca a mesma na posição inicial e na posição final do índividuo;</li>
+    <li>Em seguida escolhe-se numéros aleatórios entre 1 e o número de cidades;</li>
+    <li>Aloca esses números aleatórios nos genes do índividuo, de tal forma que esses números não tenha sido alocado em posições anteriores do vetor. Garantindo a restrição "(i) a de cada cidade a ser visitada apareça em alguma posição da rota;" </li>
+    <li>Repete-se o processo até preencher a população</li>
+  </ul>
+</div>
 
 <hr/>
 
