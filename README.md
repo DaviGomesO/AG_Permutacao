@@ -7,7 +7,8 @@
   <p>O calculo consiste em verificar para cada cidade a distância dela para as demais cidadesl, e guarda esses valores em uma matriz criada exclusivamente para armazenar as distâncias.</p>
   <p>Na sequência faz-se a <a href="#criaPopulacao">criação da população</a>, e em seguida faz-se o <a href="#fitness">cálculo da aptidão (fitness)</a> de cada índividuo/cromossomo gerado na população inicial.</p>
   <p>Para auxiliar no elitismo, faz-se a ordenação da população de acordo com o valor de fitness, a ordenação ocorre por meio do algoritmo de Insertion Sort, no qual o mesmo ordena os valores de fitness e a população em ordem crescente.</p>
-  <p>Adiante, essa população irá passar por um <a href="#geracoes">período de gerações</a> onde a mesma estará sujeita as transformações de <a href="#">Crossover</a>, que tem taxa de crossover igual a 0.8, e a <a href="#">Mutação</a> que tem a taxa de mutação com valor igual a 0.1 para ser aplicada.</p>
+  <p>Adiante, essa população irá passar por um <a href="#geracoes">período de gerações</a> onde a mesma estará sujeita as transformações de <a href="#crossover">Crossover</a>, que tem taxa de crossover igual a 0.8, e a <a href="#mutacao">Mutação</a> que tem a taxa de mutação com valor igual a 0.1 para ser aplicada.</p>
+  <p>Por fim, retorna o melhor índividuo encontrado após as gerações e seu valor de aptidão.</p>
 </div>
 
 <div id="criaPopulacao">
@@ -36,10 +37,12 @@
 
 <div id="crossover">
   <h5>Crossover</h5>
+  <p></p>
 </div>
 
 <div id="mutacao">
   <h5>Mutação</h5>
+  <p></p>
 </div>
 
 <hr/>
