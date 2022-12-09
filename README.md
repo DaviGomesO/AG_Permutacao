@@ -4,8 +4,10 @@
 
 <p id="main">
   A aplicação inicia importando a instância, em seguida faz a leitura dos dados que estão dispostos no arquivo, onde na primeira linha ele encontra o número correspondente a quantidade de cidades da instância, e após a primeira linha, os dados são dispostos na primeira coluna para a coordanada geográfica X e na segunda coluna para a coordenada geográfica Y. Após a leitura dos dados, é feito o calculo da distância entre as cidades.
+  <br/>
   O calculo consiste em verificar para cada cidade a distância dela para as demais cidadesl, e guarda esses valores em uma matriz criada exclusivamente para armazenar as distâncias.
-  Na sequência faz-se a <a href="#criaPopulacao">criação da população</a>
+  <br/>
+  Na sequência faz-se a <a href="#criaPopulacao">**criação da população**</a>
 </p>
 
 <p id="criaPopulacao"></p>
