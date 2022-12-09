@@ -5,7 +5,7 @@
 <div id="main">
   <p>A aplicação inicia importando a instância, em seguida faz a leitura dos dados que estão dispostos no arquivo, onde na primeira linha se encontra o número correspondente a quantidade de cidades da instância, e após a primeira linha, os dados são dispostos na primeira coluna para a coordanada geográfica X e na segunda coluna para a coordenada geográfica Y. Após a leitura dos dados, é feito o cálculo da distância entre as cidades.</p>
   <p>O calculo consiste em verificar para cada cidade a distância dela para as demais cidadesl, e guarda esses valores em uma matriz criada exclusivamente para armazenar as distâncias.</p>
-  <p>Na sequência faz-se a <a href="#criaPopulacao">**criação da população**</a>, e em seguida faz-se o <a href"#">cálculo da aptidão(fitness)</a> de cada índividuo/cromossomo gerado na população inicial.</p>
+  <p>Na sequência faz-se a **<a href="#criaPopulacao">criação da população</a>**, e em seguida faz-se o <a href"#">cálculo da aptidão(fitness)</a> de cada índividuo/cromossomo gerado na população inicial.</p>
 </div>
 
 <div id="criaPopulacao">
